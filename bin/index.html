@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discaverse-BIN</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Discaverse-BIN</h1>
+        <textarea id="pasteInput" placeholder="Collez votre code ou texte ici..."></textarea>
+        <button onclick="generateLink()">Partager</button>
+        <p id="shareLink"></p>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        // Gérer l'affichage d'un snippet à l'ouverture de la page
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                const decoded = decodeURIComponent(code);
+                document.getElementById('output').innerText = decoded;
+                document.getElementById('pasteInput').style.display = 'none';
+                document.querySelector('button').style.display = 'none';
+                document.getElementById('shareLink').style.display = 'none';
+            }
+        }
+
+        // Générer une URL unique
+        function generateLink() {
+            const text = document.getElementById('pasteInput').value;
+            if (text.trim() === '') {
+                alert('Veuillez coller du texte avant de partager.');
+                return;
+            }
+            const encoded = encodeURIComponent(text);
+            const url = `${window.location.origin}${window.location.pathname}?code=${encoded}`;
+            document.getElementById('shareLink').innerHTML = `Lien : <a href="${url}">${url}</a>`;
+            document.getElementById('output').innerText = text;
+        }
+    </script>
+</body>
+</html>
